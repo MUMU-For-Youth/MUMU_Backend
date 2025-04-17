@@ -1,0 +1,18 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+out/
+
+# OS
+.DS_Store
+
+# Build
+/build/
+.gradle/
+
+# Log
+*.log
+
+# 기타
+*.class
