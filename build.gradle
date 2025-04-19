@@ -24,34 +24,35 @@ repositories {
 }
 
 dependencies {
-	// Spring Web
+	// Web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// Webflux (카카오 로그인 관련 비동기 처리 등 활용)
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-	// Thymeleaf
+	// Thymeleaf (뷰 템플릿용, 선택 사항)
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
-	// Spring Security & OAuth2
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-
-	// JPA
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	// DevTools
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-	// DB
-	runtimeOnly 'com.mysql:mysql-connector-j'
-
 	// 테스트
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// ✅ 필요 없어져서 주석 처리한 의존성들
+	// Spring Security & OAuth2 (지금 필요 없다면 주석, 나중에 다시 추가)
+	// implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	// implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// JPA
+	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// DB
+	// runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// DevTools
+	// developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {

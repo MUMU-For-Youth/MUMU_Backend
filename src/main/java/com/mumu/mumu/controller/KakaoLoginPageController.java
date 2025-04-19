@@ -1,4 +1,4 @@
-package com.mumu.mumu.auth.controller;
+package com.mumu.mumu.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -18,10 +18,9 @@ public class KakaoLoginPageController {
 
     @GetMapping("/page")
     public String loginPage(Model model) {
-        String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="
-                + client_id + "&redirect_uri=" + redirect_uri;
-
+        String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+client_id+"&redirect_uri="+redirect_uri;
         model.addAttribute("location", location);
-        return "login"; // templates/login.html
+
+        return "login";
     }
 }
