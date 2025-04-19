@@ -1,6 +1,7 @@
 package com.mumu.mumu.service;
 
 import com.mumu.mumu.dto.KakaoTokenResponseDto;
+import com.mumu.mumu.dto.KakaoUserInfoResponseDto;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,5 +55,27 @@ public class KakaoService {
         log.info(" [Kakao Service] Scope ------> {}", kakaoTokenResponseDto.getScope());
 
         return kakaoTokenResponseDto.getAccessToken();
+    }
+
+    public KakaoUserInfoResponseDto getUserInfo(String accessToken) {
+
+        KakaoUserInfoResponseDto userInfo = WebClient.create(KAUTH_USER_URL_HOST)
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("https")
+                        .path("/v2/user/me")
+                        .build(true))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken) // access token 인가
+                .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
+                .retrieve()
+                //TODO : Custom Exception
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
+                .bodyToMono(KakaoUserInfoResponseDto.class)
+                .block();
+
+        log.info("[ Kakao Service ] Auth ID ---> {} ", userInfo.getId());
+
+        return userInfo;
     }
 }
