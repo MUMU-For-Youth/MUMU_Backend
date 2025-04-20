@@ -1,5 +1,6 @@
 package com.mumu.mumu.controller;
 
+import com.mumu.mumu.dto.KakaoTokenResponseDto;
 import com.mumu.mumu.service.KakaoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +21,20 @@ public class KakaoLoginController {
 
     private final KakaoService kakaoService;
 
+//    @GetMapping("/callback")
+//    public ResponseEntity<?> callback(@RequestParam("code") String code) throws IOException {
+//        String accessToken = kakaoService.getAccessTokenFromKakao(code);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+
+    //저장된 값 호출
     @GetMapping("/callback")
     public ResponseEntity<?> callback(@RequestParam("code") String code) throws IOException {
-        String accessToken = kakaoService.getAccessTokenFromKakao(code);
+        KakaoTokenResponseDto tokenDto = kakaoService.getTokenFromKakao(code);
+
+        kakaoService.saveOrUpdateMember(
+                tokenDto.getAccessToken(),
+                tokenDto.getRefreshToken());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
