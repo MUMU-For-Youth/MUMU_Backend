@@ -1,7 +1,9 @@
 package com.mumu.mumu.service;
 
+import com.mumu.mumu.domain.Member;
 import com.mumu.mumu.dto.KakaoTokenResponseDto;
 import com.mumu.mumu.dto.KakaoUserInfoResponseDto;
+import com.mumu.mumu.repository.MemberRepository;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,8 +33,8 @@ public class KakaoService {
         KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
     }
 
-    public String getAccessTokenFromKakao(String code) {
-
+    //public String getAccessTokenFromKakao(String code) {
+    public KakaoTokenResponseDto getTokenFromKakao(String code) {
         KakaoTokenResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
@@ -54,7 +58,8 @@ public class KakaoService {
         log.info(" [Kakao Service] Id Token ------> {}", kakaoTokenResponseDto.getIdToken());
         log.info(" [Kakao Service] Scope ------> {}", kakaoTokenResponseDto.getScope());
 
-        return kakaoTokenResponseDto.getAccessToken();
+        //return kakaoTokenResponseDto.getAccessToken();
+        return kakaoTokenResponseDto;
     }
 
     public KakaoUserInfoResponseDto getUserInfo(String accessToken) {
@@ -77,5 +82,26 @@ public class KakaoService {
         log.info("[ Kakao Service ] Auth ID ---> {} ", userInfo.getId());
 
         return userInfo;
+    }
+    //저장 로직
+    @Autowired
+    private MemberRepository memberRepository;
+
+    public void saveOrUpdateMember(String accessToken, String refreshToken) {
+        KakaoUserInfoResponseDto userInfo = getUserInfo(accessToken);
+        String kakaoId = userInfo.getId().toString();
+        String email = userInfo.getKakaoAccount().getEmail();  // null일 수도 있음
+
+        Optional<Member> existing = memberRepository.findByKakaoId(kakaoId);
+
+        Member member = existing.orElse(Member.builder()
+                .kakaoId(kakaoId)
+                .email(email)
+                .build());
+
+        member.setAccessToken(accessToken);
+        member.setRefreshToken(refreshToken);
+
+        memberRepository.save(member);
     }
 }
