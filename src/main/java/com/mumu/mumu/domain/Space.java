@@ -14,38 +14,63 @@ import java.time.LocalTime;
 public class Space {
 
     @Id
+    @Column(name = "space_id")
     private String spaceId;
+
+    @Column(name = "space_name")
     private String spaceName;
+
+    @Column(name = "space_location")
     private String spaceLocation;
 
-    @Column
+    @Column(name = "space_location_longitude")
     private Double spaceLocationLongitude;
 
-    @Column
+    @Column(name = "space_location_latitude")
     private Double spaceLocationLatitude;
 
+    @Column(name = "space_type")
     private String spaceType;
+
+    @Column(name = "space_target")
     private String spaceTarget;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "space_url", columnDefinition = "TEXT")
     private String spaceUrl;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "space_image", columnDefinition = "TEXT")
     private String spaceImage;
 
+    @Column(name = "region")
     private String region;
+
+    @Column(name = "contact_number")
     private String contactNumber;
 
+    @Column(name = "opening_time")
     private LocalTime openingTime;
+
+    @Column(name = "closing_time")
     private LocalTime closingTime;
+
+    @Column(name = "service_start_date")
     private LocalDate serviceStartDate;
+
+    @Column(name = "service_end_date")
     private LocalDate serviceEndDate;
+
+    @Column(name = "rsv_start_date")
     private LocalDate rsvStartDate;
+
+    @Column(name = "rsv_end_date")
     private LocalDate rsvEndDate;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "detail", columnDefinition = "TEXT")
     private String detail;
 
+    @Column(name = "space_fee")
     private String spaceFee;
+
+    @Column(name = "space_status")
     private String spaceStatus;
 }
