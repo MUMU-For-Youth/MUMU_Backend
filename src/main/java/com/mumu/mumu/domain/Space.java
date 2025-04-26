@@ -18,10 +18,10 @@ public class Space {
     private String spaceName;
     private String spaceLocation;
 
-    @Column(precision = 10, scale = 6)
+    @Column
     private Double spaceLocationLongitude;
 
-    @Column(precision = 10, scale = 6)
+    @Column
     private Double spaceLocationLatitude;
 
     private String spaceType;
