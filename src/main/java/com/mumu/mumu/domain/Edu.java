@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 public class Edu {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eduId;
 
     private String field;

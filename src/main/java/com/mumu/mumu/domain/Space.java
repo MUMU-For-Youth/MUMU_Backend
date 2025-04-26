@@ -14,9 +14,6 @@ import java.time.LocalTime;
 public class Space {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private String spaceId;
     private String spaceName;
     private String spaceLocation;
