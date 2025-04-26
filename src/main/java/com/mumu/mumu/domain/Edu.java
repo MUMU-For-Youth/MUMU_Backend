@@ -28,10 +28,10 @@ public class Edu {
     private String eduLocationName;
     private String eduAddress;
 
-    @Column(precision = 10, scale = 6)
+    @Column
     private Double eduLocationLongitude;
 
-    @Column(precision = 10, scale = 6)
+    @Column
     private Double eduLocationLatitude;
 
     private String eduTarget;
