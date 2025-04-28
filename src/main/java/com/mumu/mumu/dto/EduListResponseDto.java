@@ -28,10 +28,10 @@ public class EduListResponseDto {
         this.eduId = edu.getEduId();
         this.field = edu.getField();
         this.eduName = edu.getEduName();
-        this.eduDate = formatEduDate(edu.getEduStartDate(), edu.getEduEndDate());
+        this.eduDate = formatEduDate(edu.getRecruitmentStartDate(), edu.getRecruitmentEndDate());
         this.eduMethod = edu.getEduMethod();
         this.eduAddress = formatEduAddress(edu.getEduAddress());
-        this.eduSchedule = formatEduSchedule(edu.getEduStartTime(), edu.getEduEndTime());
+        this.eduSchedule = formatEduSchedule(edu.getRecruitmentStartTime(), edu.getRecruitmentEndTime());
         this.eduTarget = edu.getEduTarget();
         this.eduUrl = edu.getEduUrl();
         this.bookmarked = false;

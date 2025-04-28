@@ -23,12 +23,31 @@ public class EduListSpecification {
 
     public static Specification<Edu> hasStatus(String status) {
         return (root, query, cb) -> {
-            if (status == null || !status.equalsIgnoreCase("ongoing")) return null;
-            LocalDate today = LocalDate.now();
-            return cb.and(
-                    cb.lessThanOrEqualTo(root.get("eduStartDate"), today),
-                    cb.greaterThanOrEqualTo(root.get("eduEndDate"), today)
-            );
+            if (status == null || status.isBlank()) return null;
+
+            if (status.equalsIgnoreCase("모집중")) {
+                return cb.equal(root.get("recruitmentStatus"), "모집중");
+            } else if (status.equalsIgnoreCase("모집완료")) {
+                return cb.equal(root.get("recruitmentStatus"), "모집완료");
+            } else if (status.equalsIgnoreCase("모집 전")) {
+                return cb.equal(root.get("recruitmentStatus"), "모집전");
+            } else {
+                return null;
+            }
         };
+    }
+
+    // 오늘 이후(포함) 데이터 필터링
+    public static Specification<Edu> startDateAfterOrEqual(LocalDate date) {
+        return (root, query, cb) -> cb.greaterThanOrEqualTo(
+                root.get("recruitmentStartDate"), date.toString()
+        );
+    }
+
+    // 오늘 이전 데이터 필터링
+    public static Specification<Edu> startDateBefore(LocalDate date) {
+        return (root, query, cb) -> cb.lessThan(
+                root.get("recruitmentStartDate"), date.toString()
+        );
     }
 }

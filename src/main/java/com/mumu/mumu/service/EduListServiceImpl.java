@@ -7,6 +7,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,7 +22,7 @@ public class EduListServiceImpl implements EduListService {
 
     @Override
     public List<Edu> getEduList(String region, String field, String status) {
-        Specification<Edu> spec = Specification.where(null);  // 시작은 null
+        Specification<Edu> spec = Specification.where(null);
 
         if (region != null && !region.isBlank()) {
             spec = spec.and(EduListSpecification.hasRegion(region));
@@ -32,11 +34,31 @@ public class EduListServiceImpl implements EduListService {
             spec = spec.and(EduListSpecification.hasStatus(status));
         }
 
-        Sort sort = Sort.by(
-                Sort.Order.asc("eduStartDate"),
-                Sort.Order.asc("eduName")
+        LocalDate today = LocalDate.now();
+
+        // 미래 데이터 (오늘 이후 포함) : 날짜 오름차순 → 이름 오름차순
+        List<Edu> futureList = eduListRepository.findAll(
+                spec.and(EduListSpecification.startDateAfterOrEqual(today)),
+                Sort.by(
+                        Sort.Order.asc("recruitmentStartDate"),
+                        Sort.Order.asc("eduName")
+                )
         );
 
-        return eduListRepository.findAll(spec, sort);
+        // 과거 데이터 (오늘 이전) : 날짜 내림차순 → 이름 오름차순
+        List<Edu> pastList = eduListRepository.findAll(
+                spec.and(EduListSpecification.startDateBefore(today)),
+                Sort.by(
+                        Sort.Order.desc("recruitmentStartDate"),
+                        Sort.Order.asc("eduName")
+                )
+        );
+
+        // 미래 + 과거 합치기
+        List<Edu> result = new ArrayList<>(futureList.size() + pastList.size());
+        result.addAll(futureList);
+        result.addAll(pastList);
+
+        return result;
     }
 }
