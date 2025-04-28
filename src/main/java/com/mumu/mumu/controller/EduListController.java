@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,10 +26,18 @@ public class EduListController {
             @RequestParam(required = false) String field,
             @RequestParam(required = false) String status
     ) {
-        List<Edu> eduLists = eduListService.getEduList(region, field, status);
-        // EduList를 EduListResponseDto로 변환하여 반환
+        // region을 ","로 split 해서 List로 변환
+        List<String> regions = null;
+        if (region != null && !region.isBlank()) {
+            regions = Arrays.stream(region.split(","))
+                    .map(String::trim)
+                    .collect(Collectors.toList());
+        }
+
+        List<Edu> eduLists = eduListService.getEduList(regions, field, status);
+
         return eduLists.stream()
-                .map(EduListResponseDto::new)  // EduList -> EduListResponseDto로 변환
+                .map(EduListResponseDto::new)
                 .collect(Collectors.toList());
     }
 }

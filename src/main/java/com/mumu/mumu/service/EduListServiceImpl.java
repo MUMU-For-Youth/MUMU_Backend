@@ -21,11 +21,11 @@ public class EduListServiceImpl implements EduListService {
     }
 
     @Override
-    public List<Edu> getEduList(String region, String field, String status) {
+    public List<Edu> getEduList(List<String> regions, String field, String status) {
         Specification<Edu> spec = Specification.where(null);
 
-        if (region != null && !region.isBlank()) {
-            spec = spec.and(EduListSpecification.hasRegion(region));
+        if (regions != null && !regions.isEmpty()) {
+            spec = spec.and(EduListSpecification.hasRegions(regions));
         }
         if (field != null && !field.isBlank()) {
             spec = spec.and(EduListSpecification.hasField(field));
