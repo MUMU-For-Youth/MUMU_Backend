@@ -1,7 +1,7 @@
 package com.mumu.mumu.service;
 
 import com.mumu.mumu.domain.Edu;
-import com.mumu.mumu.dto.EduListResponseDto;
+import com.mumu.mumu.dto.EduDetailResponseDto;
 import com.mumu.mumu.repository.EduListRepository;
 import com.mumu.mumu.specification.EduListSpecification;
 import org.springframework.data.domain.Sort;
@@ -63,10 +63,11 @@ public class EduListServiceImpl implements EduListService {
         return result;
     }
 
+    // edu_id로 단건 조회
     @Override
-    public EduListResponseDto getEduById(Long eduId) {
+    public EduDetailResponseDto getEduById(Long eduId) {
         Edu edu = eduListRepository.findById(eduId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 교육이 존재하지 않습니다. id=" + eduId));
-        return new EduListResponseDto(edu);
+        return new EduDetailResponseDto(edu);
     }
 }

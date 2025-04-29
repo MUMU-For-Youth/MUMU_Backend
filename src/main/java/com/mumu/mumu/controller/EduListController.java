@@ -1,6 +1,7 @@
 package com.mumu.mumu.controller;
 
 import com.mumu.mumu.domain.Edu;
+import com.mumu.mumu.dto.EduDetailResponseDto;
 import com.mumu.mumu.dto.EduListResponseDto;
 import com.mumu.mumu.service.EduListService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class EduListController {
     }
 
     @GetMapping("/{eduId}")
-    public EduListResponseDto getEduById(@PathVariable Long eduId) {
+    public EduDetailResponseDto getEduById(@PathVariable Long eduId) {
         return eduListService.getEduById(eduId);
     }
 }
