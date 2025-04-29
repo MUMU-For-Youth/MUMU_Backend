@@ -20,6 +20,7 @@ public class SpaceListResponseDto {
     private String spaceTarget;
     private String spaceLocation;
     private String contactNumber;
+    private String spaceUrl;
 
     private boolean bookmarked;
 
@@ -32,6 +33,7 @@ public class SpaceListResponseDto {
         this.spaceTarget = space.getSpaceTarget();
         this.spaceLocation = formatSpaceAddress(space.getSpaceLocation()); // 서울특별시 00구까지만 표시
         this.contactNumber = space.getContactNumber();
+        this.spaceUrl = space.getSpaceUrl();
         this.bookmarked = false;
     }
 
