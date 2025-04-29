@@ -4,10 +4,7 @@ import com.mumu.mumu.domain.Edu;
 import com.mumu.mumu.dto.EduListResponseDto;
 import com.mumu.mumu.service.EduListService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,5 +27,10 @@ public class EduListController {
         return eduLists.stream()
                 .map(EduListResponseDto::new)  // EduList -> EduListResponseDto로 변환
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{eduId}")
+    public EduListResponseDto getEduById(@PathVariable Long eduId) {
+        return eduListService.getEduById(eduId);
     }
 }
