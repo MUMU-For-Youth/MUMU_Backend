@@ -8,6 +8,9 @@ import com.mumu.mumu.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.mumu.mumu.dto.EduBookmarkResponseDTO;
+import com.mumu.mumu.dto.SpaceBookmarkResponseDTO;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -15,17 +18,18 @@ import org.springframework.web.bind.annotation.*;
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
+    private final MemberRepository memberRepository;
 
     /** 교육 북마크 조회(미완성) */
     @GetMapping("/edu/bookmark")
-    public ResponseEntity<Boolean> checkEduBookmark(
+    public ResponseEntity<List<EduBookmarkResponseDTO>> getEduBookmarks(
             @RequestParam("access_token") String accessToken,
             @RequestParam(value="edu_id", required = false) String eduId
     ) {
         Long memberId = getMemberIdFromAccessToken(accessToken);
 
-        boolean isBookmarked = bookmarkService.checkEduBookmark(memberId, eduId);
-        return ResponseEntity.ok(isBookmarked);
+        List<EduBookmarkResponseDTO> bookmarks = bookmarkService.getEduBookmarkDetails(memberId, eduId);
+        return ResponseEntity.ok(bookmarks);
     }
 
     /** 교육 북마크 ON/OFF 토글 */
@@ -41,13 +45,13 @@ public class BookmarkController {
 
     /** 공간 북마크 조회(미완성) */
     @GetMapping("/space/bookmark")
-    public ResponseEntity<Boolean> checkSpaceBookmark(
+    public ResponseEntity<List<SpaceBookmarkResponseDTO>> getSpaceBookmarks(
             @RequestParam("access_token") String accessToken,
             @RequestParam(value="space_id", required = false) String spaceId
     ) {
         Long memberId = getMemberIdFromAccessToken(accessToken);
-        boolean isBookmarked = bookmarkService.checkSpaceBookmark(memberId, spaceId);
-        return ResponseEntity.ok(isBookmarked);
+        List<SpaceBookmarkResponseDTO> bookmarks = bookmarkService.getSpaceBookmarkDetails(memberId, spaceId);
+        return ResponseEntity.ok(bookmarks);
     }
 
     /** 공간 북마크 ON/OFF 토글 */
@@ -62,8 +66,7 @@ public class BookmarkController {
     }
 
 
-    /** ✨ access_token으로 member_id를 찾는 임시 메서드 */
-    private final MemberRepository memberRepository;
+    /** ✨ access_token으로 member_id를 찾는 메서드 */
     private Long getMemberIdFromAccessToken(String accessToken) {
         Member member = memberRepository.findByAccessToken(accessToken)
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 access_token입니다."));
