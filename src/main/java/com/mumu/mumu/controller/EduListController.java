@@ -7,6 +7,7 @@ import com.mumu.mumu.service.EduListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,11 @@ public class EduListController {
             @RequestParam(required = false) String field,
             @RequestParam(required = false) String status
     ) {
-        List<Edu> eduLists = eduListService.getEduList(region, field, status);
+        List<String> regions = parseToList(region);
+        List<String> fields = parseToList(field);
+        List<String> statuses = parseToList(status);
+
+        List<Edu> eduLists = eduListService.getEduList(regions, fields, statuses);
         // EduList를 EduListResponseDto로 변환하여 반환
         return eduLists.stream()
                 .map(EduListResponseDto::new)  // EduList -> EduListResponseDto로 변환
@@ -33,5 +38,15 @@ public class EduListController {
     @GetMapping("/{eduId}")
     public EduDetailResponseDto getEduById(@PathVariable Long eduId) {
         return eduListService.getEduById(eduId);
+    }
+
+    private List<String> parseToList(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        return Arrays.stream(value.split(","))
+                .map(String::trim)
+                .filter(str -> !str.isEmpty())
+                .collect(Collectors.toList());
     }
 }

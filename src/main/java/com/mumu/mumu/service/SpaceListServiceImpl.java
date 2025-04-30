@@ -23,17 +23,17 @@ public class SpaceListServiceImpl implements SpaceListService {
     }
 
     @Override
-    public List<SpaceListResponseDto> getSpaceList(String region, String target, String type) {
+    public List<SpaceListResponseDto> getSpaceList(List<String> regions, List<String> targets, List<String> types) {
         Specification<Space> spec = Specification.where(null);
 
-        if (region != null && !region.isBlank()) {
-            spec = spec.and(SpaceListSpecification.hasRegion(region));
+        if (regions != null && !regions.isEmpty()) {
+            spec = spec.and((root, query, cb) -> root.get("region").in(regions));
         }
-        if (target != null && !target.isBlank()) {
-            spec = spec.and(SpaceListSpecification.hasTarget(target));
+        if (targets != null && !targets.isEmpty()) {
+            spec = spec.and((root, query, cb) -> root.get("spaceTarget").in(targets));
         }
-        if (type != null && !type.isBlank()) {
-            spec = spec.and(SpaceListSpecification.hasType(type));
+        if (types != null && !types.isEmpty()) {
+            spec = spec.and((root, query, cb) -> root.get("spaceType").in(types));
         }
 
         LocalDate today = LocalDate.now();
