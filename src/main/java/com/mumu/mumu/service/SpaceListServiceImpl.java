@@ -1,6 +1,7 @@
 package com.mumu.mumu.service;
 
 import com.mumu.mumu.domain.Space;
+import com.mumu.mumu.dto.SpaceDetailResponseDto;
 import com.mumu.mumu.dto.SpaceListResponseDto;
 import com.mumu.mumu.repository.SpaceRepository;
 import com.mumu.mumu.specification.SpaceListSpecification;
@@ -67,5 +68,12 @@ public class SpaceListServiceImpl implements SpaceListService {
         }
 
         return dtoList;
+    }
+
+    @Override
+    public SpaceDetailResponseDto getSpaceById(String spaceId) {
+        Space space = spaceRepository.findById(spaceId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 공간이 존재하지 않습니다. id=" + spaceId));
+        return new SpaceDetailResponseDto(space);
     }
 }
