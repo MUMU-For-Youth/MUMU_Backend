@@ -51,6 +51,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
+          port: 22
           key: ${{ secrets.EC2_KEY }}
           debug: true
           script: |
