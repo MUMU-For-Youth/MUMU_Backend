@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SpaceRepository extends JpaRepository<Space, Long> {
+public interface SpaceRepository extends JpaRepository<Space, String> {
     List<Space> findByRegionAndSpaceTargetAndSpaceType(String region, String target, String type);
 }
