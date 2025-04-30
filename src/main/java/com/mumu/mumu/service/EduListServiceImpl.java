@@ -22,17 +22,17 @@ public class EduListServiceImpl implements EduListService {
     }
 
     @Override
-    public List<Edu> getEduList(String region, String field, String status) {
+    public List<Edu> getEduList(List<String> regions, List<String> fields, List<String> statuses) {
         Specification<Edu> spec = Specification.where(null);
 
-        if (region != null && !region.isBlank()) {
-            spec = spec.and(EduListSpecification.hasRegion(region));
+        if (regions != null && !regions.isEmpty()) {
+            spec = spec.and((root, query, cb) -> root.get("eduRegion").in(regions));
         }
-        if (field != null && !field.isBlank()) {
-            spec = spec.and(EduListSpecification.hasField(field));
+        if (fields != null && !fields.isEmpty()) {
+            spec = spec.and((root, query, cb) -> root.get("field").in(fields));
         }
-        if (status != null && !status.isBlank()) {
-            spec = spec.and(EduListSpecification.hasStatus(status));
+        if (statuses != null && !statuses.isEmpty()) {
+            spec = spec.and((root, query, cb) -> root.get("recruitmentStatus").in(statuses));
         }
 
         LocalDate today = LocalDate.now();
