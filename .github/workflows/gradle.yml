@@ -12,6 +12,7 @@ jobs:
   # Spring Boot 애플리케이션을 빌드하여 도커허브에 푸시하는 과정
   build-docker-image:
     runs-on: ubuntu-latest
+    environment: APP_PROPS
     steps:
     - uses: actions/checkout@v3
     # 0. 설정
