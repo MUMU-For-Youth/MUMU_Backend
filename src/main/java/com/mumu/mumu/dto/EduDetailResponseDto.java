@@ -16,11 +16,13 @@ public class EduDetailResponseDto {
     private long eduId;
     private String eduName;
     private String eduDate; // 요일 포함된 문자열로 포맷
+    private String field;
     private String eduMethod;
     private String eduAddress;
     private String eduSchedule; // 변경된 부분: List<String> -> String
     private String eduTarget;
-    private String eduContent;
+    private String max_capacity;
+    private String eduTeacher;
     private String eduUrl;
     private boolean bookmarked;
 
@@ -29,11 +31,13 @@ public class EduDetailResponseDto {
         this.eduId = edu.getEduId();
         this.eduName = edu.getEduName();
         this.eduDate = formatEduDate(edu.getRecruitmentStartDate(), edu.getRecruitmentEndDate());
+        this.field = edu.getField();
         this.eduMethod = edu.getEduMethod();
         this.eduAddress = formatEduAddress(edu.getEduAddress());
         this.eduSchedule = formatEduSchedule(edu.getRecruitmentStartTime(), edu.getRecruitmentEndTime());
         this.eduTarget = edu.getEduTarget();
-        this.eduContent = getEduContent();
+        this.max_capacity = edu.getMaxCapacity();
+        this.eduTeacher = edu.getEduTeacher();
         this.eduUrl = edu.getEduUrl();
         this.bookmarked = false;
     }
