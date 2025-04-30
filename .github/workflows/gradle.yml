@@ -52,6 +52,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_KEY }}
+          debug: true
           script: |
             # Pull the latest image
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mumu_backend:latest
