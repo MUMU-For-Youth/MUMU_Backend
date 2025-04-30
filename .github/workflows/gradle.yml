@@ -9,24 +9,6 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    runs-on: self-hosted # <- 우분투 서버에서 실행하도록 하는 명령어
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: build
-
-    - name: Execute Jar File # 추가
-      run: sudo kill -9 `sudo lsof -t -i:8080` & sudo java -jar /home/ubuntu/actions-runner/_work/linode-github-action-test/linode-github-action-test/build/libs/linode-github-action-test-0.0.1-SNAPSHOT.jar &
-
   # Spring Boot 애플리케이션을 빌드하여 도커허브에 푸시하는 과정
   build-docker-image:
     runs-on: ubuntu-latest
@@ -59,3 +41,22 @@ jobs:
     # 5. Docker Hub 이미지 푸시
     - name: docker Hub push
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mumu_backend
+
+  deploy:
+    needs: build-docker-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}         # EC2 퍼블릭 IP 또는 도메인
+          username: ubuntu                     # EC2 접속 유저
+          key: ${{ secrets.EC2_KEY }}      # GitHub에 등록된 private key
+          script: |
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mumu_backend:latest
+            docker stop mumu_backend    || true
+            docker rm   mumu_backend    || true
+            docker run -d \
+              --name mumu_backend \
+              -p 8080:8080 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/mumu_backend:latest
