@@ -71,6 +71,18 @@ public class Edu {
     @Column(name = "edu_teacher")
     private String eduTeacher;
 
+    @Column(name = "edu_start_date")
+    private String eduStartDate;
+
+    @Column(name = "edu_end_date")
+    private String eduEndDate;
+
+    @Column(name = "edu_start_time")
+    private String eduStartTime;
+
+    @Column(name = "edu_end_time")
+    private String eduEndTime;
+
     @Column(name = "edu_region")
     private String eduRegion;
 }
