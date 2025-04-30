@@ -22,22 +22,21 @@ public class EduListController {
     public List<EduListResponseDto> getEduLists(
             @RequestParam(required = false) String region,
             @RequestParam(required = false) String field,
-            @RequestParam(required = false) String status
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String access_token
     ) {
         List<String> regions = parseToList(region);
         List<String> fields = parseToList(field);
         List<String> statuses = parseToList(status);
 
-        List<Edu> eduLists = eduListService.getEduList(regions, fields, statuses);
-        // EduList를 EduListResponseDto로 변환하여 반환
-        return eduLists.stream()
-                .map(EduListResponseDto::new)  // EduList -> EduListResponseDto로 변환
-                .collect(Collectors.toList());
+        return eduListService.getEduList(regions, fields, statuses, access_token);
     }
 
     @GetMapping("/{eduId}")
-    public EduDetailResponseDto getEduById(@PathVariable Long eduId) {
-        return eduListService.getEduById(eduId);
+    public EduDetailResponseDto getEduById(
+            @PathVariable Long eduId,
+            @RequestParam(required = false) String access_token) {
+        return eduListService.getEduById(eduId, access_token);
     }
 
     private List<String> parseToList(String value) {
