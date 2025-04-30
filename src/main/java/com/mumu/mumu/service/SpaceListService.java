@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SpaceListService {
 
-    List<SpaceListResponseDto> getSpaceList(List<String> regions, List<String> targets, List<String> types);
+    List<SpaceListResponseDto> getSpaceList(List<String> regions, List<String> targets, List<String> types, String accessToken);
 
-    SpaceDetailResponseDto getSpaceById(String spaceId);
+    SpaceDetailResponseDto getSpaceById(String spaceId, String accessToken);
 }

@@ -24,17 +24,20 @@ public class SpaceListController {
     public List<SpaceListResponseDto> getSpaceList(
             @RequestParam(required = false) String region,
             @RequestParam(required = false) String target,
-            @RequestParam(required = false) String type) {
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String access_token) {
         List<String> regions = parseToList(region);
         List<String> targets = parseToList(target);
         List<String> types = parseToList(type);
 
-        return spaceListService.getSpaceList(regions, targets, types);
+        return spaceListService.getSpaceList(regions, targets, types, access_token);
     }
 
     @GetMapping("/api/space/{spaceId}")
-    public SpaceDetailResponseDto getSpaceById(@PathVariable String spaceId) {
-        return spaceListService.getSpaceById(spaceId);
+    public SpaceDetailResponseDto getSpaceById(
+            @PathVariable String spaceId,
+            @RequestParam(required = false) String access_token) {
+        return spaceListService.getSpaceById(spaceId, access_token);
     }
 
     private List<String> parseToList(String value) {

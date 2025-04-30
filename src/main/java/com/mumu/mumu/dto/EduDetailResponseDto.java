@@ -25,7 +25,7 @@ public class EduDetailResponseDto {
     private boolean bookmarked;
 
     // 생성자
-    public EduDetailResponseDto(Edu edu) {
+    public EduDetailResponseDto(Edu edu, boolean isBookmarked) {
         this.eduId = edu.getEduId();
         this.eduName = edu.getEduName();
         this.eduDate = formatEduDate(edu.getRecruitmentStartDate(), edu.getRecruitmentEndDate());
@@ -33,9 +33,9 @@ public class EduDetailResponseDto {
         this.eduAddress = formatEduAddress(edu.getEduAddress());
         this.eduSchedule = formatEduSchedule(edu.getRecruitmentStartTime(), edu.getRecruitmentEndTime());
         this.eduTarget = edu.getEduTarget();
-        this.eduContent = getEduContent();
+        this.eduContent = edu.getEduContent();
         this.eduUrl = edu.getEduUrl();
-        this.bookmarked = false;
+        this.bookmarked = isBookmarked;
     }
 
     // 날짜를 "2025.04.22(화)" 혹은 "2025.04.22(화)~2025.04.25(금)" 형식으로 반환
