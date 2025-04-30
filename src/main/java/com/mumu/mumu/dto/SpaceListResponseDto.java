@@ -13,10 +13,10 @@ import java.time.format.DateTimeFormatter;
 @NoArgsConstructor
 public class SpaceListResponseDto {
 
+    private String spaceId;
     private String spaceType;
     private String spaceName;
-    private String openingTime; // 월~금 이용시간
-    private String closingTime; // 월~금 이용시간
+    private String spaceTime;
     private String spaceTarget;
     private String spaceLocation;
     private String contactNumber;
@@ -26,10 +26,10 @@ public class SpaceListResponseDto {
 
     // 생성자
     public SpaceListResponseDto(Space space) {
+        this.spaceId = space.getSpaceId();
         this.spaceType = space.getSpaceType();
         this.spaceName = space.getSpaceName();
-        this.openingTime = formatTime(space.getOpeningTime());
-        this.closingTime = formatTime(space.getClosingTime());
+        this.spaceTime = formatTime(space.getOpeningTime(), space.getClosingTime());
         this.spaceTarget = space.getSpaceTarget();
         this.spaceLocation = formatSpaceAddress(space.getSpaceLocation()); // 서울특별시 00구까지만 표시
         this.contactNumber = space.getContactNumber();
@@ -37,17 +37,17 @@ public class SpaceListResponseDto {
         this.bookmarked = false;
     }
 
-    // 시간을 "월~금, 10:00~17:00" 형식으로 변환
-    private String formatTime(LocalTime time) {
-        if (time == null) {
+    // 시간을 10:00~17:00" 형식으로 변환
+    private String formatTime(LocalTime openingTime, LocalTime closingTime) {
+        if (openingTime == null || closingTime == null) {
             return "";
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm"); // 24시간 형식으로 포맷
-        String formattedTime = time.format(formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String formattedOpeningTime = openingTime.format(formatter);
+        String formattedClosingTime = closingTime.format(formatter);
 
-        // "월~금, 10:00~17:00" 형식으로 리턴
-        return "월~금, " + formattedTime + "~" + formattedTime;
+        return formattedOpeningTime + "~" + formattedClosingTime;
     }
 
     // 서울특별시 00구까지만 출력
