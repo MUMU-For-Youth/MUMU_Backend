@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v3
     # 0. 설정
     - name: Generate application.properties
-        run:|
+      run: |
           echo "${{ secrets.APP_PROPS }}" > src/main/resources/application.properties
     # 1. Java 17 세팅
     - name: Set up JDK 17
