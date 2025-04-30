@@ -4,35 +4,36 @@ import com.mumu.mumu.domain.Edu;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EduListResponseDto {
+public class EduDetailResponseDto {
 
     private long eduId;
-    private String field;
     private String eduName;
     private String eduDate; // 요일 포함된 문자열로 포맷
     private String eduMethod;
     private String eduAddress;
     private String eduSchedule; // 변경된 부분: List<String> -> String
     private String eduTarget;
+    private String eduContent;
     private String eduUrl;
     private boolean bookmarked;
 
     // 생성자
-    public EduListResponseDto(Edu edu) {
+    public EduDetailResponseDto(Edu edu) {
         this.eduId = edu.getEduId();
-        this.field = edu.getField();
         this.eduName = edu.getEduName();
         this.eduDate = formatEduDate(edu.getRecruitmentStartDate(), edu.getRecruitmentEndDate());
         this.eduMethod = edu.getEduMethod();
         this.eduAddress = formatEduAddress(edu.getEduAddress());
         this.eduSchedule = formatEduSchedule(edu.getRecruitmentStartTime(), edu.getRecruitmentEndTime());
         this.eduTarget = edu.getEduTarget();
+        this.eduContent = getEduContent();
         this.eduUrl = edu.getEduUrl();
         this.bookmarked = false;
     }
