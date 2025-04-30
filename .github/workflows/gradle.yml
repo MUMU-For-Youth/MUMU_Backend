@@ -49,14 +49,23 @@ jobs:
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ secrets.EC2_HOST }}         # EC2 퍼블릭 IP 또는 도메인
-          username: ubuntu                     # EC2 접속 유저
-          key: ${{ secrets.EC2_KEY }}      # GitHub에 등록된 private key
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
           script: |
+            # Pull the latest image
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mumu_backend:latest
-            docker stop mumu_backend    || true
-            docker rm   mumu_backend    || true
+            
+            # Check if container exists
+            if docker ps -a --format '{{.Names}}' | grep -q '^mumu_backend$'; then
+              # Stop and remove existing container
+              docker stop mumu_backend
+              docker rm mumu_backend
+            fi
+            
+            # Run new container
             docker run -d \
               --name mumu_backend \
+              --restart unless-stopped \
               -p 8080:8080 \
-              ${{ secrets.DOCKERHUB_USERNAME }}/mumu_backend:latest
+              ${{ secrets.DOCKERHUB_USERNAME }}/mumu_backend:latest 
