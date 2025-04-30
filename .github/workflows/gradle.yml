@@ -56,17 +56,17 @@ jobs:
           debug: true
           script: |
             # Pull the latest image
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mumu_backend:latest
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mumu_backend:latest
             
             # Check if container exists
-            if docker ps -a --format '{{.Names}}' | grep -q '^mumu_backend$'; then
+            if sudo docker ps -a --format '{{.Names}}' | grep -q '^mumu_backend$'; then
               # Stop and remove existing container
-              docker stop mumu_backend
-              docker rm mumu_backend
+              sudo docker stop mumu_backend
+              sudo docker rm mumu_backend
             fi
             
             # Run new container
-            docker run -d \
+            sudo docker run -d \
               --name mumu_backend \
               --restart unless-stopped \
               -p 8080:8080 \
