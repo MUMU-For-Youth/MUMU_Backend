@@ -37,6 +37,20 @@ public class EduListResponseDto {
         this.bookmarked = false;
     }
 
+    // 북마크 상태를 포함한 생성자
+    public EduListResponseDto(Edu edu, boolean isBookmarked) {
+        this.eduId = edu.getEduId();
+        this.field = edu.getField();
+        this.eduName = edu.getEduName();
+        this.eduDate = formatEduDate(edu.getRecruitmentStartDate(), edu.getRecruitmentEndDate());
+        this.eduMethod = edu.getEduMethod();
+        this.eduAddress = formatEduAddress(edu.getEduAddress());
+        this.eduSchedule = formatEduSchedule(edu.getRecruitmentStartTime(), edu.getRecruitmentEndTime());
+        this.eduTarget = edu.getEduTarget();
+        this.eduUrl = edu.getEduUrl();
+        this.bookmarked = isBookmarked;
+    }
+
     // 날짜를 "2025.04.22(화)" 혹은 "2025.04.22(화)~2025.04.25(금)" 형식으로 반환
     private String formatEduDate(String startDate, String endDate) {
         if (startDate != null && !startDate.isBlank() && endDate != null && !endDate.isBlank()) {

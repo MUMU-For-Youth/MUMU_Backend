@@ -25,7 +25,7 @@ public class SpaceDetailResponseDto {
     private boolean bookmarked;
 
     // 생성자
-    public SpaceDetailResponseDto(Space space) {
+    public SpaceDetailResponseDto(Space space, boolean isBookmarked) {
         this.spaceId = space.getSpaceId();
         this.spaceName = space.getSpaceName();
         this.spaceTime = formatTime(space.getOpeningTime(), space.getClosingTime());
@@ -34,7 +34,7 @@ public class SpaceDetailResponseDto {
         this.contactNumber = space.getContactNumber();
         this.spaceContent = space.getDetail();
         this.spaceUrl = space.getSpaceUrl();
-        this.bookmarked = false;
+        this.bookmarked = isBookmarked;
     }
 
     // 시간을 10:00~17:00" 형식으로 변환
