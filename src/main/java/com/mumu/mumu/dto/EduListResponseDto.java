@@ -15,6 +15,7 @@ public class EduListResponseDto {
     private long eduId;
     private String field;
     private String eduName;
+    private String eduImage;
     private String eduDate; // 요일 포함된 문자열로 포맷
     private String eduMethod;
     private String eduAddress;
@@ -28,6 +29,7 @@ public class EduListResponseDto {
         this.eduId = edu.getEduId();
         this.field = edu.getField();
         this.eduName = edu.getEduName();
+        this.eduImage = edu.getEduImage();
         this.eduDate = formatEduDate(edu.getRecruitmentStartDate(), edu.getRecruitmentEndDate());
         this.eduMethod = edu.getEduMethod();
         this.eduAddress = formatEduAddress(edu.getEduAddress());
