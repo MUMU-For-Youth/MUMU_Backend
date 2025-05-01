@@ -44,6 +44,7 @@ public class EduListResponseDto {
         this.eduId = edu.getEduId();
         this.field = edu.getField();
         this.eduName = edu.getEduName();
+        this.eduImage = edu.getEduImage();
         this.eduDate = formatEduDate(edu.getRecruitmentStartDate(), edu.getRecruitmentEndDate());
         this.eduMethod = edu.getEduMethod();
         this.eduAddress = formatEduAddress(edu.getEduAddress());
