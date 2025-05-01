@@ -4,14 +4,13 @@ import com.mumu.mumu.dto.KakaoTokenResponseDto;
 import com.mumu.mumu.service.KakaoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -21,20 +20,46 @@ public class KakaoLoginController {
 
     private final KakaoService kakaoService;
 
+    @Value("${kakao.client_id}")
+    private String clientId;
+
+    @Value("${kakao.redirect_uri}")
+    private String redirectUri;
+
 //    @GetMapping("/callback")
 //    public ResponseEntity<?> callback(@RequestParam("code") String code) throws IOException {
 //        String accessToken = kakaoService.getAccessTokenFromKakao(code);
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
 
-    //저장된 값 호출
-    @GetMapping("/callback")
-    public ResponseEntity<?> callback(@RequestParam("code") String code) throws IOException {
+    @GetMapping("/auth/kakao/url")
+    public ResponseEntity<?> getKakaoLoginUrl() {
+        String url = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUri;
+        return ResponseEntity.ok(Map.of("url", url));
+    }
+
+    @PostMapping("/auth/kakao/callback")
+    public ResponseEntity<?> kakaoCallback(@RequestBody Map<String, String> body) {
+        String code = body.get("code");
+
+        // 1. 인가코드로 토큰 요청
         KakaoTokenResponseDto tokenDto = kakaoService.getTokenFromKakao(code);
 
-        kakaoService.saveOrUpdateMember(
-                tokenDto.getAccessToken(),
-                tokenDto.getRefreshToken());
-        return new ResponseEntity<>(HttpStatus.OK);
+        // 2. 토큰으로 사용자 정보 조회 & DB 저장/업데이트
+        kakaoService.saveOrUpdateMember(tokenDto.getAccessToken(), tokenDto.getRefreshToken());
+
+        // 3. accessToken 등을 프론트에 응답
+        return ResponseEntity.ok(Map.of("accessToken", tokenDto.getAccessToken()));
     }
+
+//    //저장된 값 호출
+//    @GetMapping("/callback")
+//    public ResponseEntity<?> callback(@RequestParam("code") String code) throws IOException {
+//        KakaoTokenResponseDto tokenDto = kakaoService.getTokenFromKakao(code);
+//
+//        kakaoService.saveOrUpdateMember(
+//                tokenDto.getAccessToken(),
+//                tokenDto.getRefreshToken());
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 }
