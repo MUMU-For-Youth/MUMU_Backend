@@ -25,15 +25,17 @@ public class KakaoService {
     private String clientId;
     private final String KAUTH_TOKEN_URL_HOST;
     private final String KAUTH_USER_URL_HOST;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Autowired
     public KakaoService(@Value("${kakao.client_id}") String clientId) {
         this.clientId = clientId;
-        KAUTH_TOKEN_URL_HOST ="https://kauth.kakao.com";
+        KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com";
         KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
     }
 
-    //public String getAccessTokenFromKakao(String code) {
+    // 카카오로부터 액세스 토큰을 얻는 메서드
     public KakaoTokenResponseDto getTokenFromKakao(String code) {
         KakaoTokenResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
                 .uri(uriBuilder -> uriBuilder
@@ -45,25 +47,22 @@ public class KakaoService {
                         .build(true))
                 .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
                 .retrieve()
-                //TODO : Custom Exception
+                // 예외 처리
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
                 .bodyToMono(KakaoTokenResponseDto.class)
                 .block();
 
-
         log.info(" [Kakao Service] Access Token ------> {}", kakaoTokenResponseDto.getAccessToken());
         log.info(" [Kakao Service] Refresh Token ------> {}", kakaoTokenResponseDto.getRefreshToken());
-        //제공 조건: OpenID Connect가 활성화 된 앱의 토큰 발급 요청인 경우 또는 scope에 openid를 포함한 추가 항목 동의 받기 요청을 거친 토큰 발급 요청인 경우
         log.info(" [Kakao Service] Id Token ------> {}", kakaoTokenResponseDto.getIdToken());
         log.info(" [Kakao Service] Scope ------> {}", kakaoTokenResponseDto.getScope());
 
-        //return kakaoTokenResponseDto.getAccessToken();
         return kakaoTokenResponseDto;
     }
 
+    // 액세스 토큰을 이용해 카카오 사용자 정보를 얻는 메서드
     public KakaoUserInfoResponseDto getUserInfo(String accessToken) {
-
         KakaoUserInfoResponseDto userInfo = WebClient.create(KAUTH_USER_URL_HOST)
                 .get()
                 .uri(uriBuilder -> uriBuilder
@@ -73,7 +72,7 @@ public class KakaoService {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken) // access token 인가
                 .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
                 .retrieve()
-                //TODO : Custom Exception
+                // 예외 처리
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
                 .bodyToMono(KakaoUserInfoResponseDto.class)
@@ -83,10 +82,8 @@ public class KakaoService {
 
         return userInfo;
     }
-    //저장 로직
-    @Autowired
-    private MemberRepository memberRepository;
 
+    // 회원 정보를 저장 또는 갱신하는 메서드
     public void saveOrUpdateMember(String accessToken, String refreshToken) {
         KakaoUserInfoResponseDto userInfo = getUserInfo(accessToken);
         String kakaoId = userInfo.getId().toString();
@@ -103,5 +100,27 @@ public class KakaoService {
         member.setRefreshToken(refreshToken);
 
         memberRepository.save(member);
+    }
+
+    // 리프레시 토큰을 이용하여 액세스 토큰을 갱신하는 메서드
+    public String refreshAccessToken(String refreshToken) {
+        // 리프레시 토큰을 사용해 새로운 액세스 토큰을 얻는 API 요청 로직
+        KakaoTokenResponseDto tokenResponse = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("https")
+                        .path("/oauth/token")
+                        .queryParam("grant_type", "refresh_token")
+                        .queryParam("client_id", clientId)
+                        .queryParam("refresh_token", refreshToken)
+                        .build(true))
+                .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Token")))
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
+                .bodyToMono(KakaoTokenResponseDto.class)
+                .block();
+
+        // 새로 받은 액세스 토큰만 반환
+        return tokenResponse.getAccessToken();
     }
 }
