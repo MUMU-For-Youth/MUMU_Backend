@@ -15,12 +15,16 @@ public class EduDetailResponseDto {
 
     private long eduId;
     private String eduName;
-    private String eduDate; // 요일 포함된 문자열로 포맷
-    private String eduMethod;
-    private String eduAddress;
-    private String eduSchedule; // 변경된 부분: List<String> -> String
-    private String eduTarget;
-    private String eduContent;
+    private String eduImage;
+    private String eduDate; // 일시(2025.04.22(화))
+    private String field; // 분야
+    private String eduMethod; // 방식
+    private String eduAddress; // 주소
+    private String eduSchedule; // 일정(12:00~18:00)
+    private String eduTarget; // 대상
+    private String eduLocationName;// 장소 이름
+    private String max_capacity; // 모집정원
+    private String eduTeacher; // 강사명
     private String eduUrl;
     private boolean bookmarked;
 
@@ -28,12 +32,16 @@ public class EduDetailResponseDto {
     public EduDetailResponseDto(Edu edu, boolean isBookmarked) {
         this.eduId = edu.getEduId();
         this.eduName = edu.getEduName();
+        this.eduImage = edu.getEduImage();
         this.eduDate = formatEduDate(edu.getRecruitmentStartDate(), edu.getRecruitmentEndDate());
+        this.field = edu.getField();
         this.eduMethod = edu.getEduMethod();
         this.eduAddress = formatEduAddress(edu.getEduAddress());
         this.eduSchedule = formatEduSchedule(edu.getRecruitmentStartTime(), edu.getRecruitmentEndTime());
         this.eduTarget = edu.getEduTarget();
-        this.eduContent = edu.getEduContent();
+        this.eduLocationName = edu.getEduLocationName();
+        this.max_capacity = edu.getMaxCapacity();
+        this.eduTeacher = edu.getEduTeacher();
         this.eduUrl = edu.getEduUrl();
         this.bookmarked = isBookmarked;
     }
