@@ -15,6 +15,7 @@ public class SpaceListResponseDto {
 
     private String spaceId;
     private String spaceType;
+    private String spaceImage;
     private String spaceName;
     private String spaceTime;
     private String spaceTarget;
@@ -28,6 +29,7 @@ public class SpaceListResponseDto {
     public SpaceListResponseDto(Space space) {
         this.spaceId = space.getSpaceId();
         this.spaceType = space.getSpaceType();
+        this.spaceImage = space.getSpaceImage();
         this.spaceName = space.getSpaceName();
         this.spaceTime = formatTime(space.getOpeningTime(), space.getClosingTime());
         this.spaceTarget = space.getSpaceTarget();
@@ -41,6 +43,7 @@ public class SpaceListResponseDto {
     public SpaceListResponseDto(Space space, boolean isBookmarked) {
         this.spaceId = space.getSpaceId();
         this.spaceType = space.getSpaceType();
+        this.spaceImage = space.getSpaceImage();
         this.spaceName = space.getSpaceName();
         this.spaceTime = formatTime(space.getOpeningTime(), space.getClosingTime());
         this.spaceTarget = space.getSpaceTarget();
