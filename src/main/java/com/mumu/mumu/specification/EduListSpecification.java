@@ -10,7 +10,7 @@ public class EduListSpecification {
     public static Specification<Edu> hasRegion(String region) {
         return (root, query, cb) -> {
             if (region == null || region.isBlank()) return null;
-            return cb.like(root.get("eduAddress"), "%" + region + "%");
+            return cb.like(root.get("eduRegion"), "%" + region + "%");
         };
     }
 
