@@ -10,7 +10,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 모든 URL에 대해
-                .allowedOrigins("https://mumu-for-youth.github.io") // 프론트 주소 입력
+                .allowedOrigins(
+                    "https://mumu-for-youth.github.io",  // GitHub Pages
+                    "https://mumu-for-youth-backend.click"            // 새로운 도메인
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true); // 쿠키 등 인증정보 포함 허용
     }
