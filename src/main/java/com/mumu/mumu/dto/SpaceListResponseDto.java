@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 public class SpaceListResponseDto {
 
     private String spaceId;
-    private String spaceType;
+    private String type;
     private String spaceImage;
     private String spaceName;
     private String spaceTime;
@@ -28,7 +28,7 @@ public class SpaceListResponseDto {
     // 생성자
     public SpaceListResponseDto(Space space) {
         this.spaceId = space.getSpaceId();
-        this.spaceType = space.getType();
+        this.type = space.getType();
         this.spaceImage = space.getSpaceImage();
         this.spaceName = space.getSpaceName();
         this.spaceTime = formatTime(space.getOpeningTime(), space.getClosingTime());
@@ -42,7 +42,7 @@ public class SpaceListResponseDto {
     // 북마크 상태를 포함한 생성자
     public SpaceListResponseDto(Space space, boolean isBookmarked) {
         this.spaceId = space.getSpaceId();
-        this.spaceType = space.getType();
+        this.type = space.getType();
         this.spaceImage = space.getSpaceImage();
         this.spaceName = space.getSpaceName();
         this.spaceTime = formatTime(space.getOpeningTime(), space.getClosingTime());

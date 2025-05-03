@@ -13,7 +13,7 @@ public class SpaceBookmarkResponseDTO {
     private String spaceLocation;
     private Double spaceLocationLongitude;
     private Double spaceLocationLatitude;
-    private String spaceType;
+    private String type;
     private String spaceTarget;
     private String spaceUrl;
     private String spaceImage;
