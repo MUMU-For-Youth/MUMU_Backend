@@ -73,4 +73,8 @@ public class Space {
 
     @Column(name = "space_status")
     private String spaceStatus;
+
+    public String getType() {
+        return type;
+    }
 }

@@ -165,7 +165,7 @@ public class BookmarkService {
                 space.getSpaceLocation(),
                 space.getSpaceLocationLongitude(),
                 space.getSpaceLocationLatitude(),
-                space.getSpaceType(),
+                space.getType(),
                 space.getSpaceTarget(),
                 space.getSpaceUrl(),
                 space.getSpaceImage(),

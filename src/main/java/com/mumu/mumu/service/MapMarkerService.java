@@ -70,7 +70,7 @@ public class MapMarkerService {
 
         if (types != null && !types.isEmpty()) {
             spaceList = spaceList.stream()
-                    .filter(space -> types.contains(space.getSpaceType()))
+                    .filter(space -> types.contains(space.getType()))
                     .collect(Collectors.toList());
         }
 
