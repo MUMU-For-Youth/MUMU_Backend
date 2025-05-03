@@ -34,7 +34,7 @@ public class KakaoLoginController {
 
     @GetMapping("/auth/kakao/url")
     public ResponseEntity<?> getKakaoLoginUrl() {
-        String url = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUri;
+        String url = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + clientId;
         return ResponseEntity.ok(Map.of("url", url));
     }
 
