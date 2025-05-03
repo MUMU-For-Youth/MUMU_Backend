@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 @NoArgsConstructor
 public class EduListResponseDto {
 
+
     private long eduId;
     private String field;
     private String eduName;

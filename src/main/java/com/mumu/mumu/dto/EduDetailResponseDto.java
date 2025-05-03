@@ -28,6 +28,7 @@ public class EduDetailResponseDto {
     private String eduUrl;
     private boolean bookmarked;
 
+
     // 생성자
     public EduDetailResponseDto(Edu edu, boolean isBookmarked) {
         this.eduId = edu.getEduId();

@@ -39,6 +39,7 @@ public class SpaceListResponseDto {
         this.bookmarked = false;
     }
 
+
     // 북마크 상태를 포함한 생성자
     public SpaceListResponseDto(Space space, boolean isBookmarked) {
         this.spaceId = space.getSpaceId();

@@ -37,7 +37,6 @@ public class SpaceListSpecification {
         if (targets == null || targets.isEmpty()) {
             return null;
         }
-
         return Specification.where(
             targets.stream()
                 .map(SpaceListSpecification::hasTarget)

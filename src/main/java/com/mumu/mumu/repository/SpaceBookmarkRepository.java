@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.List;
 
 public interface SpaceBookmarkRepository extends JpaRepository<SpaceBookmark, Long> {
-
     Optional<SpaceBookmark> findByMemberAndSpace(Member member, Space space);
     List<SpaceBookmark> findByMember(Member member);
 }

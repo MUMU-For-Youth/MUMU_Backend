@@ -3,6 +3,7 @@ package com.mumu.mumu.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 //일단 다 전달하는 걸로 진행
 @Getter
 @AllArgsConstructor

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface EducationRepository extends JpaRepository<Edu, Long> {
     List<Edu> findByEduRegionAndFieldAndRecruitmentStatus(String region, String field, String status);
+
 }

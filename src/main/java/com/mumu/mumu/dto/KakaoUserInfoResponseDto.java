@@ -13,6 +13,7 @@ public class KakaoUserInfoResponseDto {
     @JsonProperty("id")
     public Long id;
 
+
     @JsonProperty("kakao_account")
     public KakaoAccount kakaoAccount;
 

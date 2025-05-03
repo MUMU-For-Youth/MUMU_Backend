@@ -35,6 +35,7 @@ public class KakaoService {
         KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
     }
 
+
     // 카카오로부터 액세스 토큰을 얻는 메서드
     public KakaoTokenResponseDto getTokenFromKakao(String code) {
         KakaoTokenResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()

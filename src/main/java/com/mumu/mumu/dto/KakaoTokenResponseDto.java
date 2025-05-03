@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KakaoTokenResponseDto {
 
+
     @JsonProperty("token_type")
     private String tokenType;
 

@@ -35,7 +35,6 @@ public class EduListServiceImpl implements EduListService {
     @Override
     public List<EduListResponseDto> getEduList(List<String> regions, List<String> fields, List<String> statuses, String accessToken) {
         Specification<Edu> spec = Specification.where(null);
-
         if (regions != null && !regions.isEmpty()) {
             spec = spec.and((root, query, cb) -> root.get("eduRegion").in(regions));
         }

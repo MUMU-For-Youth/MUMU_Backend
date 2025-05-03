@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MapMarkerService {
-
     private final EducationRepository eduRepository;
     private final SpaceRepository spaceRepository;
 

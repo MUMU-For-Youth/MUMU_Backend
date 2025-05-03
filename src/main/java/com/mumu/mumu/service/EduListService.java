@@ -8,6 +8,5 @@ import java.util.List;
 
 public interface EduListService {
     List<EduListResponseDto> getEduList(List<String> regions, List<String> fields, List<String> statuses, String accessToken);
-
     EduDetailResponseDto getEduById(Long eduId, String accessToken);
 }

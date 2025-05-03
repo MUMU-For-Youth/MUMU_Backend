@@ -6,7 +6,6 @@ import org.springframework.data.jpa.domain.Specification;
 import java.time.LocalDate;
 
 public class EduListSpecification {
-
     public static Specification<Edu> hasRegion(String region) {
         return (root, query, cb) -> {
             if (region == null || region.isBlank()) return null;
