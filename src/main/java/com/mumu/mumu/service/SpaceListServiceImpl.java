@@ -43,7 +43,7 @@ public class SpaceListServiceImpl implements SpaceListService {
             spec = spec.and(SpaceListSpecification.hasTargets(targets));
         }
         if (types != null && !types.isEmpty()) {
-            spec = spec.and((root, query, cb) -> root.get("type").in(types));
+            spec = spec.and((root, query, cb) -> root.get("spaceType").in(types));
         }
 
         LocalDate today = LocalDate.now();
