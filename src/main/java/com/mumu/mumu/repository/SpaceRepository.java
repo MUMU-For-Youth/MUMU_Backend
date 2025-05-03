@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface SpaceRepository extends JpaRepository<Space, String>, JpaSpecificationExecutor<Space> {
     List<Space> findByRegionAndSpaceTargetAndSpaceType(String region, String target, String type);
+
 }

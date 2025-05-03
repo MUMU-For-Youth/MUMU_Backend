@@ -35,7 +35,6 @@ public class SpaceListServiceImpl implements SpaceListService {
     @Override
     public List<SpaceListResponseDto> getSpaceList(List<String> regions, List<String> targets, List<String> types, String accessToken) {
         Specification<Space> spec = Specification.where(null);
-
         if (regions != null && !regions.isEmpty()) {
             spec = spec.and((root, query, cb) -> root.get("region").in(regions));
         }

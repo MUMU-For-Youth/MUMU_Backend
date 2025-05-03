@@ -180,6 +180,7 @@ public class BookmarkService {
                 space.getDetail(),
                 space.getSpaceFee(),
                 space.getSpaceStatus()
+
         );
     }
 }

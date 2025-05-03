@@ -27,6 +27,7 @@ public class SpaceDetailResponseDto {
     private String spaceUrl;
     private boolean bookmarked;
 
+
     // 생성자
     public SpaceDetailResponseDto(Space space, boolean isBookmarked) {
         this.spaceId = space.getSpaceId();
