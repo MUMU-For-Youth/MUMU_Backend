@@ -40,7 +40,7 @@ public class SpaceListServiceImpl implements SpaceListService {
             spec = spec.and((root, query, cb) -> root.get("region").in(regions));
         }
         if (targets != null && !targets.isEmpty()) {
-            spec = spec.and((root, query, cb) -> root.get("target").in(targets));
+            spec = spec.and(SpaceListSpecification.hasTargets(targets));
         }
         if (types != null && !types.isEmpty()) {
             spec = spec.and((root, query, cb) -> root.get("type").in(types));
