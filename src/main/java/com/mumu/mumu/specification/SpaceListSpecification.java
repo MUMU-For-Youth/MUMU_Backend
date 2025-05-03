@@ -52,7 +52,7 @@ public class SpaceListSpecification {
 
     // type 조건
     public static Specification<Space> hasType(String type) {
-        return (root, query, builder) -> builder.equal(root.get("spaceType"), type);
+        return (root, query, builder) -> builder.equal(root.get("type"), type);
     }
 
     // 서비스 시작일이 오늘 이후인 경우
