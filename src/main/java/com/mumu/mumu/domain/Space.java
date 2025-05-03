@@ -30,7 +30,7 @@ public class Space {
     private Double spaceLocationLatitude;
 
     @Column(name = "space_type")
-    private String spaceType;
+    private String type;
 
     @Column(name = "space_target")
     private String spaceTarget;

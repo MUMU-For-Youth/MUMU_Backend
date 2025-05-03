@@ -38,7 +38,10 @@ public class SpaceListServiceImpl implements SpaceListService {
 
         // region 필터링 (OR 조건)
         if (regions != null && !regions.isEmpty()) {
-            spec = spec.and((root, query, cb) -> root.get("region").in(regions));
+            spec = spec.and((root, query, cb) -> {
+                query.distinct(true);
+                return root.get("region").in(regions);
+            });
         }
 
         // target 필터링 (OR 조건)
@@ -48,7 +51,10 @@ public class SpaceListServiceImpl implements SpaceListService {
 
         // type 필터링 (OR 조건)
         if (types != null && !types.isEmpty()) {
-            spec = spec.and((root, query, cb) -> root.get("spaceType").in(types));
+            spec = spec.and((root, query, cb) -> {
+                query.distinct(true);
+                return root.get("type").in(types);
+            });
         }
 
         LocalDate today = LocalDate.now();
