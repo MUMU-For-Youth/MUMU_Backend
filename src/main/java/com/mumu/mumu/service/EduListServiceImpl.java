@@ -36,12 +36,17 @@ public class EduListServiceImpl implements EduListService {
     public List<EduListResponseDto> getEduList(List<String> regions, List<String> fields, List<String> statuses, String accessToken) {
         Specification<Edu> spec = Specification.where(null);
 
+        // region 필터링 (OR 조건)
         if (regions != null && !regions.isEmpty()) {
             spec = spec.and((root, query, cb) -> root.get("eduRegion").in(regions));
         }
+
+        // field 필터링 (OR 조건)
         if (fields != null && !fields.isEmpty()) {
             spec = spec.and((root, query, cb) -> root.get("field").in(fields));
         }
+
+        // status 필터링 (OR 조건)
         if (statuses != null && !statuses.isEmpty()) {
             spec = spec.and((root, query, cb) -> root.get("recruitmentStatus").in(statuses));
         }

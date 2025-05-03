@@ -36,12 +36,17 @@ public class SpaceListServiceImpl implements SpaceListService {
     public List<SpaceListResponseDto> getSpaceList(List<String> regions, List<String> targets, List<String> types, String accessToken) {
         Specification<Space> spec = Specification.where(null);
 
+        // region 필터링 (OR 조건)
         if (regions != null && !regions.isEmpty()) {
             spec = spec.and((root, query, cb) -> root.get("region").in(regions));
         }
+
+        // target 필터링 (OR 조건)
         if (targets != null && !targets.isEmpty()) {
             spec = spec.and(SpaceListSpecification.hasTargets(targets));
         }
+
+        // type 필터링 (OR 조건)
         if (types != null && !types.isEmpty()) {
             spec = spec.and((root, query, cb) -> root.get("spaceType").in(types));
         }
