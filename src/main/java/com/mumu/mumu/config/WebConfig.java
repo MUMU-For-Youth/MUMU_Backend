@@ -12,7 +12,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**") // 모든 URL에 대해
                 .allowedOrigins(
                     "https://mumu-for-youth.github.io",  // GitHub Pages
-                    "https://mumu-for-youth-backend.click"            // 새로운 도메인
+                    "https://mumu-for-youth-backend.click",            // 새로운 도메인
+                        "http://localhost:3000",
+                        "https://localhost:3000"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true); // 쿠키 등 인증정보 포함 허용
