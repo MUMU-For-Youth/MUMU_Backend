@@ -52,6 +52,13 @@ public class KakaoLoginController {
         return ResponseEntity.ok(Map.of("accessToken", tokenDto.getAccessToken()));
     }
 
+    @PostMapping("/auth/kakao/logout")
+    public ResponseEntity<?> kakaoLogout(@RequestHeader("Authorization") String authHeader) {
+        String accessToken = authHeader.replace("Bearer ", "");
+        kakaoService.kakaoLogout(accessToken);
+        return ResponseEntity.ok("카카오 로그아웃 완료");
+    }
+
 //    //저장된 값 호출
 //    @GetMapping("/callback")
 //    public ResponseEntity<?> callback(@RequestParam("code") String code) throws IOException {

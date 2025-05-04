@@ -124,4 +124,21 @@ public class KakaoService {
         // 새로 받은 액세스 토큰만 반환
         return tokenResponse.getAccessToken();
     }
+
+    // 로그아웃
+    public void kakaoLogout(String accessToken) {
+        WebClient.create(KAUTH_USER_URL_HOST)
+                .post()
+                .uri("/v1/user/logout")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, response -> {
+                    return Mono.error(new RuntimeException("클라이언트 오류 - 카카오 로그아웃 실패"));
+                })
+                .onStatus(HttpStatusCode::is5xxServerError, response -> {
+                    return Mono.error(new RuntimeException("서버 오류 - 카카오 로그아웃 실패"));
+                })
+                .bodyToMono(String.class)
+                .block(); // 동기 처리
+    }
 }
