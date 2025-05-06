@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Slf4j
@@ -34,8 +36,22 @@ public class KakaoLoginController {
 
     @GetMapping("/auth/kakao/url")
     public ResponseEntity<?> getKakaoLoginUrl() {
-        String url = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + clientId;
+        String encodedRedirectUri = URLEncoder.encode(redirectUri, StandardCharsets.UTF_8);
+        String url = "https://kauth.kakao.com/oauth/authorize"
+                + "?response_type=code"
+                + "&client_id=" + clientId
+                + "&redirect_uri=" + encodedRedirectUri;
+
         return ResponseEntity.ok(Map.of("url", url));
+    }
+
+    @GetMapping("/auth/kakao/redirect")
+    public ResponseEntity<?> redirectToFrontend(@RequestParam("code") String code) {
+        // 프론트에 인가 코드를 전달하는 리디렉션
+        String frontendUrl = "https://mumu-for-youth.github.io/MUMU_Frontend//#/kakao/callback?code=" + code;
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Location", frontendUrl)
+                .build();
     }
 
     @PostMapping("/auth/kakao/callback")
