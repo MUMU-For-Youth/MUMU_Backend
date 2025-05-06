@@ -49,7 +49,7 @@ public class KakaoLoginController {
     public ResponseEntity<?> redirectToFrontend(@RequestParam("code") String code) {
         // 프론트에 인가 코드를 전달하는 리디렉션
 //        String frontendUrl = "https://mumu-for-youth.github.io/MUMU_Frontend//#/kakao/callback?code=" + code;
-        String frontendUrl = "http://localhost:3000/#kakao/callback?code=" + code;
+        String frontendUrl = "http://localhost:3000/#/kakao/callback?code=" + code;
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Location", frontendUrl)
                 .build();
