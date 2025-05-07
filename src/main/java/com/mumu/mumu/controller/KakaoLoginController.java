@@ -28,19 +28,12 @@ public class KakaoLoginController {
     @Value("${kakao.redirect_uri}")
     private String redirectUri;
 
-//    @GetMapping("/callback")
-//    public ResponseEntity<?> callback(@RequestParam("code") String code) throws IOException {
-//        String accessToken = kakaoService.getAccessTokenFromKakao(code);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
     @GetMapping("/auth/kakao/url")
     public ResponseEntity<?> getKakaoLoginUrl() {
-        String encodedRedirectUri = URLEncoder.encode(redirectUri, StandardCharsets.UTF_8);
         String url = "https://kauth.kakao.com/oauth/authorize"
                 + "?response_type=code"
                 + "&client_id=" + clientId
-                + "&redirect_uri=" + encodedRedirectUri;
+                + "&redirect_uri=" + redirectUri;
 
         return ResponseEntity.ok(Map.of("url", url));
     }
@@ -48,7 +41,7 @@ public class KakaoLoginController {
     @GetMapping("/auth/kakao/redirect")
     public ResponseEntity<?> redirectToFrontend(@RequestParam("code") String code) {
         // 프론트에 인가 코드를 전달하는 리디렉션
-//        String frontendUrl = "https://mumu-for-youth.github.io/MUMU_Frontend//#/kakao/callback?code=" + code;
+//        String frontendUrl = "https://mumu-for-youth.github.io/MUMU_Frontend/#/kakao/callback?code=" + code;
         String frontendUrl = "http://localhost:3000/#/kakao/callback?code=" + code;
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Location", frontendUrl)
@@ -73,15 +66,4 @@ public class KakaoLoginController {
         kakaoService.kakaoLogout(accessToken);
         return ResponseEntity.ok("카카오 로그아웃 완료");
     }
-
-//    //저장된 값 호출
-//    @GetMapping("/callback")
-//    public ResponseEntity<?> callback(@RequestParam("code") String code) throws IOException {
-//        KakaoTokenResponseDto tokenDto = kakaoService.getTokenFromKakao(code);
-//
-//        kakaoService.saveOrUpdateMember(
-//                tokenDto.getAccessToken(),
-//                tokenDto.getRefreshToken());
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 }
