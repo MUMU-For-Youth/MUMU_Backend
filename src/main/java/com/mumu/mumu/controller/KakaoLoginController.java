@@ -55,17 +55,15 @@ public class KakaoLoginController {
                 .build();
     }
 
-    @PostMapping("/auth/kakao/callback")
-    public ResponseEntity<?> kakaoCallback(@RequestBody Map<String, String> body) {
-        String code = body.get("code");
-
+    @GetMapping("/auth/kakao/callback")
+    public ResponseEntity<?> kakaoCallback(@RequestParam("code") String code) {
         // 1. 인가코드로 토큰 요청
         KakaoTokenResponseDto tokenDto = kakaoService.getTokenFromKakao(code);
 
-        // 2. 토큰으로 사용자 정보 조회 & DB 저장/업데이트
+        // 2. 사용자 정보 저장/업데이트
         kakaoService.saveOrUpdateMember(tokenDto.getAccessToken(), tokenDto.getRefreshToken());
 
-        // 3. accessToken 등을 프론트에 응답
+        // 3. accessToken 등을 응답
         return ResponseEntity.ok(Map.of("accessToken", tokenDto.getAccessToken()));
     }
 
