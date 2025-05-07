@@ -95,7 +95,7 @@ public class SpaceListServiceImpl implements SpaceListService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 공간이 존재하지 않습니다. id=" + spaceId));
         
         boolean isBookmarked = false;
-        if (accessToken != null && !accessToken.isBlank()) {
+        if (accessToken != null && !accessToken.isBlank() && !"null".equals(accessToken)) {
             Member member = memberRepository.findByAccessToken(accessToken)
                     .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 access_token입니다."));
             isBookmarked = checkSpaceBookmark(member.getMemberId(), spaceId);
