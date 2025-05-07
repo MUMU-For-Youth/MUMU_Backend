@@ -18,6 +18,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Slf4j
@@ -31,6 +33,9 @@ public class KakaoService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Value("${kakao.redirect_uri}")
+    private String redirectUri;
+
     @Autowired
     public KakaoService(@Value("${kakao.client_id}") String clientId) {
         this.clientId = clientId;
@@ -41,13 +46,13 @@ public class KakaoService {
 
     // 카카오로부터 액세스 토큰을 얻는 메서드
     public KakaoTokenResponseDto getTokenFromKakao(String code) {
-        String redirectUri = "http://localhost:3000/MUMU_Frontend";
+        String encodedRedirectUri = URLEncoder.encode(redirectUri, StandardCharsets.UTF_8);
 
         // 요청 본문 설정 (x-www-form-urlencoded 형식)
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", "authorization_code");
         formData.add("client_id", clientId);
-        formData.add("redirect_uri", redirectUri);
+        formData.add("redirect_uri", encodedRedirectUri);
         formData.add("code", code);
 
         return WebClient.create(KAUTH_TOKEN_URL_HOST)
