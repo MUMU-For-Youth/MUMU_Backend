@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -39,30 +42,64 @@ public class KakaoService {
     // 카카오로부터 액세스 토큰을 얻는 메서드
     public KakaoTokenResponseDto getTokenFromKakao(String code) {
         String redirectUri = "http://localhost:3000/MUMU_Frontend";
-        KakaoTokenResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
-                .uri(uriBuilder -> uriBuilder
-                        .scheme("https")
-                        .path("/oauth/token")
-                        .queryParam("grant_type", "authorization_code")
-                        .queryParam("client_id", clientId)
-                        .queryParam("redirect_uri", redirectUri)
-                        .queryParam("code", code)
-                        .build(true))
+
+        // 요청 본문 설정 (x-www-form-urlencoded 형식)
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("grant_type", "authorization_code");
+        formData.add("client_id", clientId);
+        formData.add("redirect_uri", redirectUri);
+        formData.add("code", code);
+
+        return WebClient.create(KAUTH_TOKEN_URL_HOST)
+                .post()
+                .uri("/oauth/token")
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8")
+                .body(BodyInserters.fromFormData(formData)) // <-- body로 보냄
                 .retrieve()
-                // 예외 처리
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
-                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
+                        clientResponse.bodyToMono(String.class).flatMap(errorBody -> {
+                            System.err.println("❗️4xx 오류 발생 - 응답 본문: " + errorBody);
+                            return Mono.error(new RuntimeException("카카오 요청 실패: " + errorBody));
+                        })
+                )
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse ->
+                        Mono.error(new RuntimeException("Internal Server Error"))
+                )
                 .bodyToMono(KakaoTokenResponseDto.class)
                 .block();
-
-        log.info(" [Kakao Service] Access Token ------> {}", kakaoTokenResponseDto.getAccessToken());
-        log.info(" [Kakao Service] Refresh Token ------> {}", kakaoTokenResponseDto.getRefreshToken());
-        log.info(" [Kakao Service] Id Token ------> {}", kakaoTokenResponseDto.getIdToken());
-        log.info(" [Kakao Service] Scope ------> {}", kakaoTokenResponseDto.getScope());
-
-        return kakaoTokenResponseDto;
     }
+
+//    public KakaoTokenResponseDto getTokenFromKakao(String code) {
+//        String redirectUri = "http://localhost:3000/MUMU_Frontend";
+//        KakaoTokenResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
+//                .uri(uriBuilder -> uriBuilder
+//                        .scheme("https")
+//                        .path("/oauth/token")
+//                        .queryParam("grant_type", "authorization_code")
+//                        .queryParam("client_id", clientId)
+//                        .queryParam("redirect_uri", redirectUri)
+//                        .queryParam("code", code)
+//                        .build(true))
+//                .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8")
+//                .retrieve()
+//                // 예외 처리
+//                .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
+//                        clientResponse.bodyToMono(String.class).flatMap(errorBody -> {
+//                            System.err.println("❗️4xx 오류 발생 - 응답 본문: " + errorBody);
+//                            return Mono.error(new RuntimeException("카카오 요청 실패: " + errorBody));
+//                        })
+//                )
+//                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
+//                .bodyToMono(KakaoTokenResponseDto.class)
+//                .block();
+//
+//        log.info(" [Kakao Service] Access Token ------> {}", kakaoTokenResponseDto.getAccessToken());
+//        log.info(" [Kakao Service] Refresh Token ------> {}", kakaoTokenResponseDto.getRefreshToken());
+//        log.info(" [Kakao Service] Id Token ------> {}", kakaoTokenResponseDto.getIdToken());
+//        log.info(" [Kakao Service] Scope ------> {}", kakaoTokenResponseDto.getScope());
+//
+//        return kakaoTokenResponseDto;
+//    }
 
     // 액세스 토큰을 이용해 카카오 사용자 정보를 얻는 메서드
     public KakaoUserInfoResponseDto getUserInfo(String accessToken) {
